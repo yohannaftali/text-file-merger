@@ -1,0 +1,27 @@
+{
+  "name": "text-file-merger",
+  "version": "1.0.0",
+  "description": "Merge txt, csv, tsv files into single file.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "file",
+    "merge",
+    "merger",
+    "txt",
+    "tsv",
+    "csv"
+  ],
+  "repository": "https://github.com/yohannaftali/text-file-merger",
+  "author": "Yohan Naftali",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "2.0.8",
+    "electron-packager": "^12.1.1"
+  },
+  "dependencies": {
+    "nconf": "^0.10.0"
+  }
+}

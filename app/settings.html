@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link href="css/materialize.min.css" rel="stylesheet" type="text/css" media=" screen,projection"/>
+    <link href="font/MaterialIcons/material-icons.css" rel="stylesheet" type="text/css"/>
+    <script src="js/materialize.min.js"></script>
+</head>
+<body class="red lighten-5">
+<nav>
+    <div class="nav-wrapper">
+        <a href="#!" class="brand-logo left"><i class="material-icons">settings</i>Settings</a>
+        <ul class="right">
+            <li><a id="close" href="#!" class="red-text text-lighten-3"><i class="material-icons">close</i></a></li>
+        </ul>
+    </div>
+</nav>
+<form action="#">
+<div id="settings-screen" class="container">
+    <div class="row">
+        <p class="caption">File Extention</p>
+        <p>
+            <label>
+                <input name="fileext" type="radio" class="with-gap file-extention-radio" id="file-ext-txt" file-ext='txt'/>
+                <span>txt</span>
+            </label>
+        </p>
+        <p>
+            <label>
+            <input name="fileext" type="radio" class="with-gap file-extention-radio" id="file-ext-csv" file-ext='csv'/>
+            <span>csv</span>
+            </label>
+        </p>
+        <p>
+            <label>
+                <input name="fileext" type="radio" class="with-gap file-extention-radio" id="file-ext-tsv" file-ext='tsv'/>
+                <span>tsv</span>
+            </label>
+        </p>
+    </div>
+</div>
+</form>
+<script src="js/settings.js"></script>
+</body>
+</html>
