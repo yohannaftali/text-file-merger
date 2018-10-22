@@ -26,7 +26,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 npm install electron-packager -g
 
 # Run electron-packager
-electron-packager.
+electron-packager .
 
 ## License
 
