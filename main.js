@@ -106,26 +106,26 @@ ipcMain.on('set-file-ext', function () {
 });
 
 function selectDirectory() {
-  var result = dialog.showOpenDialog(mainWindow, {
+  const result = dialog.showOpenDialog(mainWindow, {
     properties: ['openDirectory']
   });
-  var folder = result && typeof(result) !== 'undefined' && typeof(result[0])!== 'undefined' ? result[0] : false;
-  var resultFile = "";
+  const folder = result && typeof(result) !== 'undefined' && typeof(result[0])!== 'undefined' ? result[0] : false;
+  let resultFile = "";
 
   if(folder){
     resultFile = path.join(folder, "result."+settingFileExt);
-    var filter = "**."+settingFileExt;
+    const filter = "**."+settingFileExt;
     fs.readdir(folder, [filter], function(err, files) {
-      var row = 0;
+      let row = 0;
       if(files.length > 0){
         fs.writeFile(resultFile, '', function(err, data){
           if (err) console.log(err);
           console.log("Successfully create " + resultFile);
         });
       }
-      for(i in files) {
-        var fileName = files[i]
-        var extention = fileName.split('.').pop();
+      for(let i in files) {
+        const fileName = files[i]
+        const extention = fileName.split('.').pop();
         filePath = path.join(folder, fileName)
         if(filePath !== resultFile){
           if(extention == settingFileExt){
