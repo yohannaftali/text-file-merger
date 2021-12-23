@@ -1,6 +1,6 @@
 'use strict';
 
-const {ipcRenderer} = require('electron');
+const { ipcRenderer } = require('electron');
 const configuration = require('../configuration');
 
 const radioEl = document.querySelectorAll('.file-extention-radio');
@@ -12,10 +12,10 @@ closeEl.addEventListener('click', function (e) {
 const fileExtSelected = configuration.readSettings('fileExt');
 for (let i = 0; i < radioEl.length; i++) {
     const thisFileExt = radioEl[i].attributes['file-ext'].value;
-    if(thisFileExt == fileExtSelected){
+    if (thisFileExt == fileExtSelected) {
         radioEl[i].checked = true;
     }
-    else{
+    else {
         radioEl[i].checked = false;
     }
     radioEl[i].addEventListener('click', function (e) {
