@@ -23,7 +23,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 ## To Build
 
 # Install electron packager
-npm install electron-packager -g
+npm install --save-dev electron-packager
 
 # Run electron-packager
 electron-packager .
