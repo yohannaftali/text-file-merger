@@ -1,6 +1,5 @@
 'use strict';
-const {remote, ipcRenderer} = require('electron');
-const path = require('path');
+const { ipcRenderer } = require('electron');
 const configuration = require('../configuration');
 
 const closeEl = document.getElementById('close');
@@ -29,34 +28,35 @@ selectButton.addEventListener('click', function () {
     ipcRenderer.send('select-directory');
 });
 
-const doneSound = function(){
+const doneSound = function () {
     const audio = new Audio(__dirname + '/wav/money.wav');
     audio.currentTime = 0;
     audio.play();
 }
 
 ipcRenderer.on('directory-reply', (event, arg) => {
-    const folder = arg && typeof(arg) !== 'undefined' && typeof(arg[0]) !== 'undefined' ? arg[0] : false;
-    const resultFile = arg && typeof(arg) !== 'undefined' && typeof(arg[1]) !== 'undefined' ? arg[1] : false;
-    const settingFileExt = arg && typeof(arg) !== 'undefined' && typeof(arg[2]) ? arg[2] : false;
-    if(folder){
+
+    const folder = arg && typeof (arg) !== 'undefined' && typeof (arg[0]) !== 'undefined' ? arg[0] : false;
+    const resultFile = arg && typeof (arg) !== 'undefined' && typeof (arg[1]) !== 'undefined' ? arg[1] : false;
+    const settingFileExt = arg && typeof (arg) !== 'undefined' && typeof (arg[2]) ? arg[2] : false;
+    if (folder) {
         folderInfo.innerHTML = 'Folder selected : ' + folder;
         filesMessage.innerHTML = "please wait...";
     }
-    else{
+    else {
         folderInfo.innerHTML = '';
         filesMessage.innerHTML = '';
     }
-    if(resultFile && settingFileExt){
+    if (resultFile && settingFileExt) {
         resultMessage.innerHTML = 'File extention to be merge = ' + settingFileExt + '<br />Result: ' + resultFile;
     }
 });
 ipcRenderer.on('files-reply', (event, arg) => {
-    if(arg){
+    if (arg) {
         filesMessage.innerHTML = "Done, process " + arg + " files, see result in the selected folder";
         doneSound();
     }
-    else{
+    else {
         filesMessage.innerHTML = "something wrong, please check your files";
     }
 });
