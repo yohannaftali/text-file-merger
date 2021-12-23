@@ -3,6 +3,10 @@ Merge txt, csv, tsv files into single file.
 This is an electron application for merging text files into single file.
 use Materialize css (https://materializecss.com/) and material design icon (https://material.io/tools/icons/)
 
+## Requirement
+node.js (https://nodejs.org/en/download/)
+git (https://git-scm.com/downloads)
+
 ## To Use
 
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
@@ -26,7 +30,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 npm install --save-dev electron-packager
 
 # Run electron-packager
-electron-packager .
+npx electron-packager .
 
 ## License
 
