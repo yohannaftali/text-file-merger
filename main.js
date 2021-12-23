@@ -27,7 +27,11 @@ function createWindow () {
     resizable: true,
     minHeight: 320,
     minWidth: 480,
-    icon: path.join(__dirname, 'app/img/app-icon.png')
+    icon: path.join(__dirname, 'app/img/app-icon.png'),
+    webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+    }
   })
 
   // and load the index.html of the app.
