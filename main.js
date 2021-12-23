@@ -1,62 +1,14 @@
-// Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const fs = require("fs");
 const path = require("path");
 const configuration = require('./configuration');
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let settingsWindow
 let settingFileExt
 
-function setFileExt(){
-  settingFileExt = configuration.readSettings('fileExt');
-}
-
-function createWindow () {
-  if (!configuration.readSettings('fileExt')) {
-    configuration.saveSettings('fileExt', 'txt');
-  }
-
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    frame:false,
-    width: 720,
-    height: 480,
-    resizable: true,
-    minHeight: 320,
-    minWidth: 480,
-    icon: path.join(__dirname, 'app/img/app-icon.png'),
-    webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-    }
-  })
-
-  // and load the index.html of the app.
-  mainWindow.loadFile(__dirname + '/app/index.html')
-
-  setFileExt()
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
 
-// Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -73,88 +25,125 @@ app.on('activate', function () {
   }
 })
 
+///////////////////////////////////////////////////////////////////////////////
+// Main Window
+///////////////////////////////////////////////////////////////////////////////
+function createWindow() {
+  if (!configuration.readSettings('fileExt')) {
+    configuration.saveSettings('fileExt', 'txt');
+  }
+  settingFileExt = configuration.readSettings('fileExt');
+
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    frame: false,
+    width: 720,
+    height: 480,
+    resizable: true,
+    minHeight: 320,
+    minWidth: 480,
+    icon: path.join(__dirname, 'app/img/app-icon.png'),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
+  mainWindow.loadFile(__dirname + '/app/index.html')
+
+  mainWindow.on('closed', function () {
+    mainWindow = null
+  })
+}
+
 ipcMain.on('close-main-window', function () {
   app.quit();
 });
 
+///////////////////////////////////////////////////////////////////////////////
+// Setting Window
+///////////////////////////////////////////////////////////////////////////////
 ipcMain.on('open-settings-window', function () {
-    if (settingsWindow) {
-        return;
+  if (settingsWindow) {
+    return;
+  }
+  settingsWindow = new BrowserWindow({
+    frame: false,
+    height: 320,
+    width: 480,
+    resizable: false,
+    parent: mainWindow,
+    modal: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
     }
+  });
 
-    settingsWindow = new BrowserWindow({
-        frame: false,
-        height: 320,
-        width: 480,
-        resizable: false,
-        parent: mainWindow,
-        modal: true,
-        webPreferences: {
-          nodeIntegration: true,
-          contextIsolation: false,
-        }
-    });
+  settingsWindow.loadFile(__dirname + '/app/settings.html');
 
-    settingsWindow.loadFile(__dirname + '/app/settings.html');
-
-    settingsWindow.on('closed', function () {
-      settingsWindow = null;
+  settingsWindow.on('closed', function () {
+    settingsWindow = null;
   });
 });
 
 ipcMain.on('close-settings-window', function () {
   if (settingsWindow) {
-      settingsWindow.close();
+    settingsWindow.close();
   }
 });
 
 ipcMain.on('set-file-ext', function () {
-  setFileExt();
+  settingFileExt = configuration.readSettings('fileExt');
 });
 
-function selectDirectory() {
-  const result = dialog.showOpenDialog(mainWindow, {
+///////////////////////////////////////////////////////////////////////////////
+// Dialog Select Directory
+///////////////////////////////////////////////////////////////////////////////
+async function selectDirectory() {
+  const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openDirectory']
   });
-  const folder = result && typeof(result) !== 'undefined' && typeof(result[0])!== 'undefined' ? result[0] : false;
-  let resultFile = "";
-
-  if(folder){
-    resultFile = path.join(folder, "result."+settingFileExt);
-    const filter = "**."+settingFileExt;
-    fs.readdir(folder, [filter], function(err, files) {
-      let row = 0;
-      if(files.length > 0){
-        fs.writeFile(resultFile, '', function(err, data){
-          if (err) console.log(err);
-          console.log("Successfully create " + resultFile);
-        });
-      }
-      for(let i in files) {
-        const fileName = files[i]
-        const extention = fileName.split('.').pop();
-        filePath = path.join(folder, fileName)
-        if(filePath !== resultFile){
-          if(extention == settingFileExt){
-            row++;
-            console.log(filePath);
-            fs.readFile(filePath, function(err, buf) {
-              if (err) console.log(err);
-              fs.appendFile(resultFile, buf, function(err, data){
+  if (result && typeof result !== 'undefined' && typeof result.canceled !== 'undefined' && !result.canceled) {
+    const folder = result && typeof result !== 'undefined' && typeof result.filePaths !== 'undefined' && typeof result.filePaths[0] !== 'undefined' ? result.filePaths[0] : false;
+    let resultFile = "";
+    if (folder) {
+      resultFile = path.join(folder, "result." + settingFileExt);
+      const filter = "**." + settingFileExt;
+      fs.readdir(folder, [filter], function (err, files) {
+        let row = 0;
+        if (files.length > 0) {
+          fs.writeFile(resultFile, '', function (err, data) {
+            if (err) console.log(err);
+            console.log("Successfully create " + resultFile);
+          });
+        }
+        for (let i in files) {
+          const fileName = files[i]
+          const extention = fileName.split('.').pop();
+          filePath = path.join(folder, fileName)
+          if (filePath !== resultFile) {
+            if (extention == settingFileExt) {
+              row++;
+              fs.readFile(filePath, function (err, buf) {
                 if (err) console.log(err);
-                console.log("Successfully Written to File.");
+                fs.appendFile(resultFile, buf, function (err, data) {
+                  if (err) console.log(err);
+                  console.log("Successfully Written to File.");
+                });
               });
-            });
+            }
           }
         }
-      }
-      console.log(row + ' files processed')
-      mainWindow.webContents.send('files-reply', row);
-    });
+        mainWindow.webContents.send('files-reply', row);
+      });
+    }
+    return [folder, resultFile, settingFileExt];
   }
-  return [folder, resultFile, settingFileExt];
+  else {
+    return [false, false, false];
+  }
 }
 
-ipcMain.on('select-directory', (event, arg) => {
-  event.sender.send('directory-reply', selectDirectory());
+ipcMain.on('select-directory', async (event) => {
+  event.sender.send('directory-reply', await selectDirectory());
 });
