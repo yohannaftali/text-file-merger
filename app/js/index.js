@@ -3,14 +3,14 @@ const {remote, ipcRenderer} = require('electron');
 const path = require('path');
 const configuration = require('../configuration');
 
-var closeEl = document.getElementById('close');
-var settingsEl = document.getElementById('settings');
-var selectButton = document.getElementById('select-btn');
-var folderInfo = document.getElementById('folder-info');
-var instruction = document.getElementById('instruction');
-var filesMessage = document.getElementById('files-message');
-var resultMessage = document.getElementById('result-message');
-var fileExtSelected = configuration.readSettings('fileExt');
+const closeEl = document.getElementById('close');
+const settingsEl = document.getElementById('settings');
+const selectButton = document.getElementById('select-btn');
+const folderInfo = document.getElementById('folder-info');
+const instruction = document.getElementById('instruction');
+const filesMessage = document.getElementById('files-message');
+const resultMessage = document.getElementById('result-message');
+const fileExtSelected = configuration.readSettings('fileExt');
 
 instruction.innerHTML = "Please select folder where your " + fileExtSelected + " files is located <br /> Warning: result file will be overwrite"
 folderInfo.innerHTML = "";
@@ -29,16 +29,16 @@ selectButton.addEventListener('click', function () {
     ipcRenderer.send('select-directory');
 });
 
-var doneSound = function(){
-    var audio = new Audio(__dirname + '/wav/money.wav');
+const doneSound = function(){
+    const audio = new Audio(__dirname + '/wav/money.wav');
     audio.currentTime = 0;
     audio.play();
 }
 
 ipcRenderer.on('directory-reply', (event, arg) => {
-    var folder = arg && typeof(arg) !== 'undefined' && typeof(arg[0]) !== 'undefined' ? arg[0] : false;
-    var resultFile = arg && typeof(arg) !== 'undefined' && typeof(arg[1]) !== 'undefined' ? arg[1] : false;
-    var settingFileExt = arg && typeof(arg) !== 'undefined' && typeof(arg[2]) ? arg[2] : false;
+    const folder = arg && typeof(arg) !== 'undefined' && typeof(arg[0]) !== 'undefined' ? arg[0] : false;
+    const resultFile = arg && typeof(arg) !== 'undefined' && typeof(arg[1]) !== 'undefined' ? arg[1] : false;
+    const settingFileExt = arg && typeof(arg) !== 'undefined' && typeof(arg[2]) ? arg[2] : false;
     if(folder){
         folderInfo.innerHTML = 'Folder selected : ' + folder;
         filesMessage.innerHTML = "please wait...";
