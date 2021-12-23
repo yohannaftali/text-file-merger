@@ -1,6 +1,6 @@
 'use strict';
 
-var nconf = require('nconf').file({file: getUserHome() + '/setting-config.json'});
+const nconf = require('nconf').file({file: getUserHome() + '/setting-config.json'});
 
 function saveSettings(settingKey, settingValue) {
     nconf.set(settingKey, settingValue);
