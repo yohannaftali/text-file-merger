@@ -18,7 +18,6 @@ for (let i = 0; i < radioEl.length; i++) {
     else{
         radioEl[i].checked = false;
     }
-
     radioEl[i].addEventListener('click', function (e) {
         bindRadioButton(e);
     });
