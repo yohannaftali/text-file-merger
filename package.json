@@ -4,7 +4,7 @@
   "description": "Merge txt, csv, tsv files into single file.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "electron": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron ."
   },
   "keywords": [
     "file",
