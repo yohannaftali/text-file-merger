@@ -87,9 +87,12 @@ ipcMain.on('open-settings-window', function () {
         height: 320,
         width: 480,
         resizable: false,
-
         parent: mainWindow,
-        modal: true
+        modal: true,
+        webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: false,
+        }
     });
 
     settingsWindow.loadFile(__dirname + '/app/settings.html');
