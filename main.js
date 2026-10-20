@@ -9,6 +9,16 @@ let settingFileExt
 
 app.on('ready', createWindow)
 
+// Block popups and navigation away from the bundled pages
+app.on('web-contents-created', function (event, contents) {
+  contents.setWindowOpenHandler(function () {
+    return { action: 'deny' }
+  })
+  contents.on('will-navigate', function (event) {
+    event.preventDefault()
+  })
+})
+
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q

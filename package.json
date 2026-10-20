@@ -18,8 +18,8 @@
   "author": "Yohan Naftali",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^16.0.5",
-    "electron-packager": "^15.4.0"
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.9.1"
   },
   "dependencies": {
     "nconf": "^0.11.3"
