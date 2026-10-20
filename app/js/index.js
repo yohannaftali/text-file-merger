@@ -5,16 +5,27 @@ const configuration = require('../configuration');
 const closeEl = document.getElementById('close');
 const settingsEl = document.getElementById('settings');
 const selectButton = document.getElementById('select-btn');
-const folderInfo = document.getElementById('folder-info');
 const instruction = document.getElementById('instruction');
+const resultCard = document.getElementById('result');
+const folderInfo = document.getElementById('folder-info');
+const extInfo = document.getElementById('ext-info');
+const resultInfo = document.getElementById('result-info');
 const filesMessage = document.getElementById('files-message');
-const resultMessage = document.getElementById('result-message');
-const fileExtSelected = configuration.readSettings('fileExt');
 
-instruction.innerHTML = "Please select folder where your " + fileExtSelected + " files is located <br /> Warning: result file will be overwrite"
-folderInfo.innerHTML = "";
-filesMessage.innerHTML = "";
-resultMessage.innerHTML = "";
+const showInstruction = function () {
+    const fileExtSelected = configuration.readSettings('fileExt');
+    instruction.textContent = 'Select the folder where your .' + fileExtSelected + ' files are located. They will be merged into a single result file.';
+}
+
+const setStatus = function (text, type) {
+    filesMessage.className = 'status' + (type ? ' ' + type : '');
+    filesMessage.textContent = text;
+}
+
+showInstruction();
+
+// Refresh when returning from the settings window
+window.addEventListener('focus', showInstruction);
 
 closeEl.addEventListener('click', function () {
     ipcRenderer.send('close-main-window');
@@ -29,34 +40,31 @@ selectButton.addEventListener('click', function () {
 });
 
 const doneSound = function () {
-    const audio = new Audio(__dirname + '/wav/money.wav');
+    const audio = new Audio('wav/money.wav');
     audio.currentTime = 0;
     audio.play();
 }
 
 ipcRenderer.on('directory-reply', (event, arg) => {
-
-    const folder = arg && typeof (arg) !== 'undefined' && typeof (arg[0]) !== 'undefined' ? arg[0] : false;
-    const resultFile = arg && typeof (arg) !== 'undefined' && typeof (arg[1]) !== 'undefined' ? arg[1] : false;
-    const settingFileExt = arg && typeof (arg) !== 'undefined' && typeof (arg[2]) ? arg[2] : false;
-    if (folder) {
-        folderInfo.innerHTML = 'Folder selected : ' + folder;
-        filesMessage.innerHTML = "please wait...";
+    const folder = arg && typeof (arg[0]) !== 'undefined' ? arg[0] : false;
+    const resultFile = arg && typeof (arg[1]) !== 'undefined' ? arg[1] : false;
+    const settingFileExt = arg && typeof (arg[2]) !== 'undefined' ? arg[2] : false;
+    if (!folder) {
+        return;
     }
-    else {
-        folderInfo.innerHTML = '';
-        filesMessage.innerHTML = '';
-    }
-    if (resultFile && settingFileExt) {
-        resultMessage.innerHTML = 'File extention to be merge = ' + settingFileExt + '<br />Result: ' + resultFile;
-    }
+    resultCard.hidden = false;
+    folderInfo.textContent = folder;
+    extInfo.textContent = settingFileExt ? '.' + settingFileExt : '';
+    resultInfo.textContent = resultFile || '';
+    setStatus('Please wait…');
 });
+
 ipcRenderer.on('files-reply', (event, arg) => {
     if (arg) {
-        filesMessage.innerHTML = "Done, process " + arg + " files, see result in the selected folder";
+        setStatus('Done, merged ' + arg + ' files. See the result in the selected folder.', 'success');
         doneSound();
     }
     else {
-        filesMessage.innerHTML = "something wrong, please check your files";
+        setStatus('No matching files found, please check your folder.', 'error');
     }
 });

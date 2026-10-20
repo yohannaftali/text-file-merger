@@ -2,30 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Text Files Merger</title>
-    <link href="css/materialize.min.css" rel="stylesheet" type="text/css" media=" screen,projection"/>
-    <link href="font/MaterialIcons/material-icons.css" rel="stylesheet" type="text/css"/>
-    <script src="js/materialize.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; media-src 'self' file:"/>
+    <title>Text Files Merger</title>
+    <link href="font/MaterialIcons/material-icons.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
 </head>
-<body class="teal lighten-5">
-<nav>
-    <div class="nav-wrapper">
-        <a href="#!" class="brand-logo left"><i class="material-icons">folder</i>Text Files Merger</a>
-        <ul class="right">
-            <li><a id="settings" href="#!" class="blue-text text-lighten-5"><i class="material-icons">settings</i></a></li>
-            <li><a id="close" href="#!" class="red-text text-lighten-3"><i class="material-icons">close</i></a></li>
-        </ul>
+<body>
+<header class="titlebar">
+    <div class="titlebar-title"><i class="material-icons">merge_type</i>Text Files Merger</div>
+    <div class="titlebar-actions">
+        <button id="settings" class="icon-btn" type="button" title="Settings"><i class="material-icons">settings</i></button>
+        <button id="close" class="icon-btn close" type="button" title="Close"><i class="material-icons">close</i></button>
     </div>
-</nav>
-<div id="main" class="container">
-    <p id="instruction" class="caption"></p>
-        <div id="select-btn" class="waves-effect waves-light btn"><i class="material-icons left">folder</i>Select Folder...</div>
-    <p id="folder-info" class="caption"></p>
-    <p id="result-message" class="caption"></p>
-    <p id="files-message" class="caption"></p>
-</div>
+</header>
+<main class="content">
+    <section class="card">
+        <h1 class="card-title">Merge files</h1>
+        <p id="instruction" class="muted"></p>
+        <p class="warning"><i class="material-icons">warning</i>An existing result file in the folder will be overwritten.</p>
+        <button id="select-btn" class="btn" type="button"><i class="material-icons">folder_open</i>Select Folder…</button>
+    </section>
+    <section id="result" class="card" hidden>
+        <dl class="details">
+            <div class="detail-row"><dt>Folder</dt><dd id="folder-info"></dd></div>
+            <div class="detail-row"><dt>Extension</dt><dd id="ext-info"></dd></div>
+            <div class="detail-row"><dt>Result file</dt><dd id="result-info"></dd></div>
+        </dl>
+        <p id="files-message" class="status"></p>
+    </section>
+</main>
 <script src="js/index.js"></script>
 </body>
 </html>
