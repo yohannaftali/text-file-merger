@@ -1,6 +1,6 @@
 {
   "name": "text-file-merger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Merge txt, csv, tsv files into single file.",
   "main": "main.js",
   "scripts": {
